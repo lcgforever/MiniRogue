@@ -40,16 +40,17 @@ using namespace std;
 class Inventory {
 public:
     // Constructor
-    Inventory();
+    Inventory() {};
     // Destructor
     ~Inventory();
     
     // Accessor
     void display() const;
     size_t getItemCount() const;
+    GameObject* getItem(char pos) const;
     
     // Mutator
-    void remove(char num);
+    void remove(char pos);
     void add(GameObject* item);
     
 private:

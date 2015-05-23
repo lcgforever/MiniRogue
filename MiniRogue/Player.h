@@ -17,13 +17,16 @@ class Player : public Actor {
 public:
     // Constructor
     Player();
+    // Destructor
+    ~Player();
     
+    // Actions
     void pickUpItem(GameObject* item);
-    void wieldWeapon(Weapon* weapon);
-    void readScroll(GameObject* item);
+    bool wieldWeapon(char pos);
+    bool readScroll(char pos);
     
 private:
-    Inventory inventory;
+    Inventory* m_inventory;
 };
 
 #endif /* defined(__MiniRogue__Player__) */

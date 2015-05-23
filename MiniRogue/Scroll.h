@@ -16,47 +16,89 @@
 #include "GameObject.h"
 #include "utilities.h"
 
-class TeleScroll : public GameObject {
+class Scroll : public GameObject {
+public:
+    // Constructor
+    Scroll(string name) : GameObject(name) {}
+    
+    // Use scroll
+    virtual int getUpgradePoints() const = 0;
+    
+    enum ScrollType {
+        TELEPORTATION,
+        IMPROVE_ARMOR,
+        RAISE_STRENGTH,
+        ENHANCE_HEALTH,
+        ENHANCE_DEXTERITY
+    };
+    
+    // Scroll type
+    virtual ScrollType getType() const = 0;
+};
+
+class TeleScroll : public Scroll {
 public:
     // constructor
-    TeleScroll() : GameObject("scroll of teleportation") {};
-}
+    TeleScroll() : Scroll("scroll of teleportation") {}
+    
+    virtual int getUpgradePoints() const = 0;
+    
+    virtual ScrollType getType() const {
+        return TELEPORTATION;
+    }
+};
 
-class ArmorScroll : public GameObject {
+class ArmorScroll : public Scroll {
 public:
     // constructor
-    ArmorScroll() : GameObject("scroll of improve armor") {};
+    ArmorScroll() : Scroll("scroll of improve armor") {}
     
-    int getArmor() {
+    virtual int getUpgradePoints() const {
         return randInt(3) + 1;
     }
-}
-
-class StrengthScroll : public GameObject {
-public:
-    StrengthScroll() : GameObject("scroll of raise strength") {};
     
-    int getStrength() {
+    virtual ScrollType getType() const {
+        return IMPROVE_ARMOR;
+    }
+};
+
+class StrengthScroll : public Scroll {
+public:
+    StrengthScroll() : Scroll("scroll of raise strength") {}
+    
+    virtual int getUpgradePoints() const {
         return randInt(3) + 1;
     }
-}
-
-class HealthScroll : public GameObject {
-public:
-    HealthScroll() : GameObject("scroll of enhance health") {};
     
-    int getHealth() {
+    virtual ScrollType getType() const {
+        return RAISE_STRENGTH;
+    }
+};
+
+class HealthScroll : public Scroll {
+public:
+    HealthScroll() : Scroll("scroll of enhance health") {}
+    
+    virtual int getUpgradePoints() const {
         return randInt(6) + 3;
     }
-}
-
-class DexterityScroll : public GameObject {
-public:
-    DexterityScroll() : GameObject("enhance dexterity") {};
     
-    int getDexterity() {
+    virtual ScrollType getType() const {
+        return ENHANCE_HEALTH;
+    }
+};
+
+class DexterityScroll : public Scroll {
+public:
+    DexterityScroll() : Scroll("enhance dexterity") {}
+    
+    virtual int getUpgradePoints() const {
         return 1;
     }
-}
+    
+    virtual ScrollType getType() const {
+        return ENHANCE_DEXTERITY;
+    }
+};
 
 #endif

@@ -8,6 +8,12 @@
 
 #include "Inventory.h"
 
+Inventory::~Inventory() {
+    for (size_t i = 0; i < items.size(); i++) {
+        delete items[i];
+    }
+}
+
 void Inventory::display() const {
     cout << "Inventory:" << endl;
     for (int i = 0; i < items.size(); i++) {
@@ -20,9 +26,21 @@ size_t Inventory::getItemCount() const {
     return items.size();
 }
 
-void Inventory::remove(char num) {
-    int charTodigit = static_cast<int> (num - 'a');
-    if (charTodigit < 0 || charTodigit > 25) {
+GameObject* Inventory::getItem(char pos) const {
+    int charTodigit = static_cast<int> (pos - 'a');
+    if (items.size() == 0 || charTodigit < 0 || charTodigit > 25) {
+        return nullptr;
+    }
+    return items[charTodigit];
+}
+
+void Inventory::add(GameObject* item) {
+    items.push_back(item);
+}
+
+void Inventory::remove(char pos) {
+    int charTodigit = static_cast<int> (pos - 'a');
+    if (items.size() == 0 || charTodigit < 0 || charTodigit > 25) {
         return;
     }
     vector<GameObject*>::iterator p = items.begin();
@@ -31,11 +49,4 @@ void Inventory::remove(char num) {
         p++;
     }
     items.erase(p);
-}
-
-void Inventory::add(GameObject* item) {
-    if (items.size() >= 26) {
-        return;
-    }
-    items.push_back(item);
 }

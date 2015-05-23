@@ -25,10 +25,12 @@ public:
     int getDexBonus() const {
         return m_dex_bonus;
     }
-    // get
     int getDamageBonus() const {
         return m_damage_amount;
     }
+    
+    // Weapon action string
+    virtual string getWeaponAction() const = 0;
     
 private:
     // A dexterity bonus
@@ -39,27 +41,47 @@ private:
 
 class Mace : public Weapon {
 public:
-    Mace() : Weapon("mace", 0, 2) {};
+    Mace() : Weapon("mace", 0, 2) {}
+    
+    virtual string getWeaponAction() const {
+        return "swings";
+    }
 };
 
 class ShortSword : public Weapon {
 public:
-    ShortSword() : Weapon("short sword", 0, 2) {};
+    ShortSword() : Weapon("short sword", 0, 2) {}
+    
+    virtual string getWeaponAction() const {
+        return "slashes";
+    }
 };
 
 class LongSword : public Weapon {
 public:
-    LongSword() : Weapon("long sword", 2, 4) {};
+    LongSword() : Weapon("long sword", 2, 4) {}
+    
+    virtual string getWeaponAction() const {
+        return "swings";
+    }
 };
 
 class MagicAxe : public Weapon {
 public:
-    MagicAxe() : Weapon("magic axe", 5, 5) {};
+    MagicAxe() : Weapon("magic axe", 5, 5) {}
+    
+    virtual string getWeaponAction() const {
+        return "chops";
+    }
 };
 
 class MagicFang : public Weapon {
 public:
-    MagicFang() : Weapon("magic fang of sleep", 3, 2) {};
+    MagicFang() : Weapon("magic fang of sleep", 3, 2) {}
+    
+    virtual string getWeaponAction() const {
+        return "strikes";
+    }
 };
 
 #endif //Weapon_INCLUDED
