@@ -17,10 +17,14 @@
 
 class Weapon : public GameObject {
 public:
-    Weapon(string name, int dex_bonus, int damage_amount): GameObject(name) {
+    // Constructor
+    Weapon(string name, int dex_bonus, int damage_amount, int row, int col): GameObject(name, row, col) {
         m_dex_bonus = dex_bonus;
         m_damage_amount = damage_amount;
     }
+    // Destructor
+    virtual ~Weapon() {}
+    
     // Accessor
     int getDexBonus() const {
         return m_dex_bonus;
@@ -29,8 +33,27 @@ public:
         return m_damage_amount;
     }
     
+    // Get object type
+    virtual ObjectType getObjectType() const {
+        return WEAPON;
+    }
+    
     // Weapon action string
     virtual string getWeaponAction() const = 0;
+    
+    // Weapon type
+    enum WeaponType {
+        MACE = 0,
+        SHORT_SWORD = 1,
+        LONG_SWORD = 2,
+        MAGIC_AXE = 3,
+        MAGIC_FANGS = 4
+    };
+    
+    virtual WeaponType getWeaponType() const = 0;
+    virtual char getSymbolOnMap() const {
+        return ')';
+    }
     
 private:
     // A dexterity bonus
@@ -41,46 +64,70 @@ private:
 
 class Mace : public Weapon {
 public:
-    Mace() : Weapon("mace", 0, 2) {}
+    Mace(int row, int col) : Weapon("mace", 0, 2, row, col) {}
     
     virtual string getWeaponAction() const {
         return "swings";
+    }
+    
+    virtual WeaponType getWeaponType() const {
+        return MACE;
     }
 };
 
 class ShortSword : public Weapon {
 public:
-    ShortSword() : Weapon("short sword", 0, 2) {}
+    ShortSword(int row, int col) : Weapon("short sword", 0, 2, row, col) {}
     
     virtual string getWeaponAction() const {
         return "slashes";
+    }
+    
+    virtual WeaponType getWeaponType() const {
+        return SHORT_SWORD;
     }
 };
 
 class LongSword : public Weapon {
 public:
-    LongSword() : Weapon("long sword", 2, 4) {}
+    LongSword(int row, int col) : Weapon("long sword", 2, 4, row, col) {}
     
     virtual string getWeaponAction() const {
         return "swings";
+    }
+    
+    virtual WeaponType getWeaponType() const {
+        return LONG_SWORD;
     }
 };
 
 class MagicAxe : public Weapon {
 public:
-    MagicAxe() : Weapon("magic axe", 5, 5) {}
+    MagicAxe(int row, int col) : Weapon("magic axe", 5, 5, row, col) {}
     
     virtual string getWeaponAction() const {
         return "chops";
+    }
+    
+    virtual WeaponType getWeaponType() const {
+        return MAGIC_AXE;
     }
 };
 
 class MagicFang : public Weapon {
 public:
-    MagicFang() : Weapon("magic fang of sleep", 3, 2) {}
+    MagicFang(int row, int col) : Weapon("magic fangs", 3, 2, row, col) {}
     
     virtual string getWeaponAction() const {
         return "strikes";
+    }
+    
+    virtual WeaponType getWeaponType() const {
+        return MAGIC_FANGS;
+    }
+    
+    int randomSleepTime() const {
+        return trueWithProbability(0.2) ? randInt(5) + 2 : 0;
     }
 };
 

@@ -9,16 +9,22 @@
 #ifndef MiniRogue_Actor_h
 #define MiniRogue_Actor_h
 
+#include <iostream>
 #include <string>
+#include <unordered_map>
 #include "Weapon.h"
 using namespace std;
 
 class Actor {
 public:
     // Constructor
-    Actor(string name, int hitPoints, int armorPoints, int strengthPoints, int dexterityPoints);
+    Actor(string name, int hitPoints, int armorPoints, int strengthPoints, int dexterityPoints, int row, int col);
+    // Copy constructor
+    Actor(const Actor& other);
+    // Assignment operator
+    Actor& operator=(const Actor& other);
     // Destructor
-    ~Actor();
+    virtual ~Actor();
     
     // Accessors
     int getRow() const;
@@ -30,16 +36,30 @@ public:
     int getDexterityPoints() const;
     int getSleepTime() const;
     Weapon* getWeapon() const;
+    bool isDead() const;
     
     // Muatators
-    void setRow(int row);
-    void setCol(int col);
+    void setPosition(int row, int col);
     void setHitPoints(int hitPoints);
     void setArmorPoints(int armorPoints);
     void setStrengthPoints(int strengthPoints);
     void setDexterityPoints(int dexterityPoints);
     void setSleepTime(int sleepTime);
     void setWeapon(Weapon* weapon);
+    void setDeadStatus(bool isDead);
+    virtual void regainHitPoints() = 0;
+    
+    enum Direction {
+        NOWHERE = -1,
+        LEFT = 0,
+        RIGHT = 1,
+        UP = 2,
+        DOWN = 3
+    };
+    
+    // Action
+    virtual string attack(Actor* actor);
+    void move(Direction direction);
     
 private:
     // The actor's current position in the level
@@ -60,6 +80,8 @@ private:
     int m_sleep_time;
     // Actor's weapon
     Weapon* m_weapon;
+    // Actor's dead status
+    bool m_dead_status;
 };
 
 #endif

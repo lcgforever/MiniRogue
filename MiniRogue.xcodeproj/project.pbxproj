@@ -47,6 +47,8 @@
 		5213DD8B1B11115600FE4A9E /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
 		5213DD8C1B11115600FE4A9E /* Weapon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Weapon.h; sourceTree = "<group>"; };
 		5213DD931B11274300FE4A9E /* Monster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Monster.h; sourceTree = "<group>"; };
+		5213DD941B11481300FE4A9E /* GoldenIdol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoldenIdol.h; sourceTree = "<group>"; };
+		5281F9431B127C2A0016EA03 /* StairWay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StairWay.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,22 +82,24 @@
 			isa = PBXGroup;
 			children = (
 				5213DD7E1B11115600FE4A9E /* Actor.cpp */,
-				5213DD801B11115600FE4A9E /* Dungeon.cpp */,
-				5213DD821B11115600FE4A9E /* Game.cpp */,
-				5213DD851B11115600FE4A9E /* Inventory.cpp */,
-				5213DD771B11113100FE4A9E /* main.cpp */,
-				5213DD871B11115600FE4A9E /* Player.cpp */,
-				5213DD8A1B11115600FE4A9E /* utilities.cpp */,
 				5213DD7F1B11115600FE4A9E /* Actor.h */,
+				5213DD801B11115600FE4A9E /* Dungeon.cpp */,
 				5213DD811B11115600FE4A9E /* Dungeon.h */,
+				5213DD821B11115600FE4A9E /* Game.cpp */,
 				5213DD831B11115600FE4A9E /* Game.h */,
 				5213DD841B11115600FE4A9E /* GameObject.h */,
+				5213DD851B11115600FE4A9E /* Inventory.cpp */,
 				5213DD861B11115600FE4A9E /* Inventory.h */,
+				5213DD771B11113100FE4A9E /* main.cpp */,
 				5213DD931B11274300FE4A9E /* Monster.h */,
+				5213DD871B11115600FE4A9E /* Player.cpp */,
 				5213DD881B11115600FE4A9E /* Player.h */,
 				5213DD891B11115600FE4A9E /* Scroll.h */,
+				5213DD8A1B11115600FE4A9E /* utilities.cpp */,
 				5213DD8B1B11115600FE4A9E /* utilities.h */,
 				5213DD8C1B11115600FE4A9E /* Weapon.h */,
+				5213DD941B11481300FE4A9E /* GoldenIdol.h */,
+				5281F9431B127C2A0016EA03 /* StairWay.h */,
 			);
 			path = MiniRogue;
 			sourceTree = "<group>";
@@ -279,6 +283,7 @@
 				5213DD7D1B11113100FE4A9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

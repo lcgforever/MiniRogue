@@ -14,36 +14,47 @@
  Scroll class is derived from GameObjects
  */
 #include "GameObject.h"
-#include "utilities.h"
 
 class Scroll : public GameObject {
 public:
     // Constructor
-    Scroll(string name) : GameObject(name) {}
+    Scroll(string name, int row, int col) : GameObject(name, row, col) {}
+    // Destructor
+    virtual ~Scroll() {}
     
     // Use scroll
     virtual int getUpgradePoints() const = 0;
     
+    // Get object type
+    virtual ObjectType getObjectType() const {
+        return SCROLL;
+    }
+    
     enum ScrollType {
-        TELEPORTATION,
-        IMPROVE_ARMOR,
-        RAISE_STRENGTH,
-        ENHANCE_HEALTH,
-        ENHANCE_DEXTERITY
+        IMPROVE_ARMOR = 0,
+        RAISE_STRENGTH = 1,
+        ENHANCE_HEALTH = 2,
+        ENHANCE_DEXTERITY = 3,
+        TELEPORTATION = 4
     };
     
     // Scroll type
-    virtual ScrollType getType() const = 0;
+    virtual ScrollType getScrollType() const = 0;
+    virtual char getSymbolOnMap() const {
+        return '?';
+    }
 };
 
 class TeleScroll : public Scroll {
 public:
     // constructor
-    TeleScroll() : Scroll("scroll of teleportation") {}
+    TeleScroll(int row, int col) : Scroll("scroll of teleportation", row, col) {}
     
-    virtual int getUpgradePoints() const = 0;
+    virtual int getUpgradePoints() const {
+        return -1;
+    }
     
-    virtual ScrollType getType() const {
+    virtual ScrollType getScrollType() const {
         return TELEPORTATION;
     }
 };
@@ -51,52 +62,52 @@ public:
 class ArmorScroll : public Scroll {
 public:
     // constructor
-    ArmorScroll() : Scroll("scroll of improve armor") {}
+    ArmorScroll(int row, int col) : Scroll("scroll of improve armor", row, col) {}
     
     virtual int getUpgradePoints() const {
         return randInt(3) + 1;
     }
     
-    virtual ScrollType getType() const {
+    virtual ScrollType getScrollType() const {
         return IMPROVE_ARMOR;
     }
 };
 
 class StrengthScroll : public Scroll {
 public:
-    StrengthScroll() : Scroll("scroll of raise strength") {}
+    StrengthScroll(int row, int col) : Scroll("scroll of raise strength", row, col) {}
     
     virtual int getUpgradePoints() const {
         return randInt(3) + 1;
     }
     
-    virtual ScrollType getType() const {
+    virtual ScrollType getScrollType() const {
         return RAISE_STRENGTH;
     }
 };
 
 class HealthScroll : public Scroll {
 public:
-    HealthScroll() : Scroll("scroll of enhance health") {}
+    HealthScroll(int row, int col) : Scroll("scroll of enhance health", row, col) {}
     
     virtual int getUpgradePoints() const {
         return randInt(6) + 3;
     }
     
-    virtual ScrollType getType() const {
+    virtual ScrollType getScrollType() const {
         return ENHANCE_HEALTH;
     }
 };
 
 class DexterityScroll : public Scroll {
 public:
-    DexterityScroll() : Scroll("enhance dexterity") {}
+    DexterityScroll(int row, int col) : Scroll("enhance dexterity", row, col) {}
     
     virtual int getUpgradePoints() const {
         return 1;
     }
     
-    virtual ScrollType getType() const {
+    virtual ScrollType getScrollType() const {
         return ENHANCE_DEXTERITY;
     }
 };

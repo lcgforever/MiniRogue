@@ -9,10 +9,13 @@
 class Game {
 public:
     Game(int goblinSmellDistance);
+    ~Game();
+    
     void play();
     
 private:
-    Dungeon dungeon;
+    Dungeon* m_dungeon;
+    Player* m_player;
 };
 
 #endif // GAME_INCLUDED

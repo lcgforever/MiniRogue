@@ -27,7 +27,7 @@ size_t Inventory::getItemCount() const {
 }
 
 GameObject* Inventory::getItem(char pos) const {
-    int charTodigit = static_cast<int> (pos - 'a');
+    int charTodigit = pos - 'a';
     if (items.size() == 0 || charTodigit < 0 || charTodigit > 25) {
         return nullptr;
     }
@@ -39,14 +39,10 @@ void Inventory::add(GameObject* item) {
 }
 
 void Inventory::remove(char pos) {
-    int charTodigit = static_cast<int> (pos - 'a');
+    int charTodigit = pos - 'a';
     if (items.size() == 0 || charTodigit < 0 || charTodigit > 25) {
         return;
     }
-    vector<GameObject*>::iterator p = items.begin();
-    int i = 0;
-    while(i != charTodigit) {
-        p++;
-    }
-    items.erase(p);
+    delete items[charTodigit];
+    items.erase(items.begin() + charTodigit);
 }

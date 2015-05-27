@@ -9,82 +9,209 @@
 #include "Player.h"
 
 // Constructor
-Player::Player() : Actor("player", 20, 2, 2, 2) {
-    ShortSword* shortSword;
+Player::Player(int row, int col) : Actor("Player", 20, 2, 2, 2, row, col) {
+    ShortSword* shortSword = new ShortSword(row, col);
     setWeapon(shortSword);
-    m_inventory->add(shortSword);
+    ShortSword* copy = new ShortSword(row, col);
+    m_inventory.add(copy);
+    getGoldenIdol = false;
+    m_max_hit_points = 20;
 }
 
-// Destructor
-Player::~Player() {
-    delete m_inventory;
+// Copy constructor
+Player::Player(const Player& other) : Actor(other) {
+    m_inventory = other.m_inventory;
+    m_max_hit_points = other.m_max_hit_points;
+    getGoldenIdol = other.getGoldenIdol;
+}
+
+// Assignment operator
+Player& Player::operator=(const Player& other) {
+    if (this != &other) {
+        Actor::operator=(other);
+        m_inventory = other.m_inventory;
+        m_max_hit_points = other.m_max_hit_points;
+        getGoldenIdol = other.getGoldenIdol;
+    }
+    
+    return *this;
+}
+
+bool Player::canPickUpItem() const {
+    return m_inventory.getItemCount() < 26;
+}
+
+bool Player::canGetItemByPos(char pos) const {
+    int charToDigit = pos - 'a';
+    return charToDigit >= 0 && charToDigit < m_inventory.getItemCount();
+}
+
+bool Player::pickedUpGoldenIdol() const {
+    return getGoldenIdol;
+}
+
+// Mutators
+void Player::setMaxHitPoints(int points) {
+    m_max_hit_points = points;
+}
+
+void Player::setPickedUpGoldenIdol() {
+    getGoldenIdol = true;
 }
 
 // Actions
-void Player::pickUpItem(GameObject* item) {
-    if (m_inventory->getItemCount() == 26) {
-        cout << "Your knapsack is full; you can't pick that up." << endl;
-        return;
-    } else {
-        m_inventory->add(item);
-        cout << "You picked up a " << item->getName() << endl;
+void Player::pickUpItem(char objectType, GameObject* item) {
+    switch (objectType) {
+        case GameObject::WEAPON: {
+            Weapon* weapon = dynamic_cast<Weapon*>(item);
+            switch (weapon->getWeaponType()) {
+                case Weapon::MACE:
+                    m_inventory.add(dynamic_cast<Mace*>(weapon));
+                    break;
+                    
+                case Weapon::SHORT_SWORD:
+                    m_inventory.add(dynamic_cast<ShortSword*>(weapon));
+                    break;
+                    
+                case Weapon::LONG_SWORD:
+                    m_inventory.add(dynamic_cast<LongSword*>(weapon));
+                    break;
+                    
+                case Weapon::MAGIC_AXE:
+                    m_inventory.add(dynamic_cast<MagicAxe*>(weapon));
+                    break;
+                    
+                case Weapon::MAGIC_FANGS:
+                    m_inventory.add(dynamic_cast<MagicFang*>(weapon));
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        }
+            
+        case GameObject::SCROLL: {
+            Scroll* scroll = dynamic_cast<Scroll*>(item);
+            switch (scroll->getScrollType()) {
+                case Scroll::IMPROVE_ARMOR:
+                    m_inventory.add(dynamic_cast<ArmorScroll*>(scroll));
+                    break;
+                    
+                case Scroll::RAISE_STRENGTH:
+                    m_inventory.add(dynamic_cast<StrengthScroll*>(scroll));
+                    break;
+                    
+                case Scroll::ENHANCE_HEALTH:
+                    m_inventory.add(dynamic_cast<HealthScroll*>(scroll));
+                    break;
+                    
+                case Scroll::ENHANCE_DEXTERITY:
+                    m_inventory.add(dynamic_cast<DexterityScroll*>(scroll));
+                    break;
+                    
+                case Scroll::TELEPORTATION:
+                    m_inventory.add(dynamic_cast<TeleScroll*>(scroll));
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        }
+            
+        default:
+            break;
     }
 }
 
-bool Player::wieldWeapon(char pos) {
-    string name = m_inventory->getItem(pos)->getName();
-    Weapon* newWeapon = dynamic_cast<Weapon*>(m_inventory->getItem(pos));
-    if (newWeapon == nullptr) {
-        cout << "You can't wield " << name << endl;
-        return false;
+string Player::wieldWeapon(char pos) {
+    GameObject* gameObject = m_inventory.getItem(pos);
+    string name = gameObject->getName();
+    if (gameObject->getObjectType() != GameObject::WEAPON) {
+        return "You can't wield a " + name + ".";
     }
-    Weapon* currentWeapon = getWeapon();
-    if (currentWeapon->getName() == newWeapon->getName()) {
-        cout << "You are wielding " << name << endl;
-        return true;
-    }
-    setWeapon(newWeapon);
-    m_inventory->remove(pos);
-    m_inventory->add(currentWeapon);
-    cout << "You are wielding " << name << endl;
-    return true;
-}
-
-bool Player::readScroll(char pos) {
-    Scroll* scroll = dynamic_cast<Scroll*>(m_inventory->getItem(pos));
-    if (scroll == nullptr) {
-        return false;
-    }
-    m_inventory->remove(pos);
-    switch (scroll->getType()) {
-        case Scroll::TELEPORTATION:
-            // Should teleport the player to a random position which is not a wall or monster
-            
-            cout << "You feel your body wrenched in space and time." << endl;
+    
+    delete getWeapon();
+    Weapon* newWeapon = dynamic_cast<Weapon*>(gameObject);
+    Weapon* copy;
+    switch (newWeapon->getWeaponType()) {
+        case Weapon::MACE:
+            copy = new Mace(getRow(), getCol());
+            setWeapon(copy);
             break;
             
-        case Scroll::IMPROVE_ARMOR:
-            setArmorPoints(getArmorPoints() + scroll->getUpgradePoints());
-            cout << "Your armor glows blue." << endl;
+        case Weapon::SHORT_SWORD:
+            copy = new ShortSword(getRow(), getCol());
+            setWeapon(copy);
             break;
             
-        case Scroll::RAISE_STRENGTH:
-            setStrengthPoints(getArmorPoints() + scroll->getUpgradePoints());
-            cout << "Your muscles bulge." << endl;
+        case Weapon::LONG_SWORD:
+            copy = new LongSword(getRow(), getCol());
+            setWeapon(copy);
             break;
             
-        case Scroll::ENHANCE_HEALTH:
-            setHitPoints(getHitPoints() + scroll->getUpgradePoints());
-            cout << "You feel your heart beating stronger." << endl;
+        case Weapon::MAGIC_AXE:
+            copy = new MagicAxe(getRow(), getCol());
+            setWeapon(copy);
             break;
             
-        case Scroll::ENHANCE_DEXTERITY:
-            setDexterityPoints(getDexterityPoints() + scroll->getUpgradePoints());
-            cout << "You feel like less of a klutz." << endl;
+        case Weapon::MAGIC_FANGS:
+            copy = new MagicFang(getRow(), getCol());
+            setWeapon(copy);
             break;
             
         default:
             break;
     }
-    return true;
+    return "You are wielding " + name + ".";
+}
+
+// Return true if the player read a teleportation scroll
+string Player::readScroll(char pos) {
+    GameObject* gameObject = m_inventory.getItem(pos);
+    string name = gameObject->getName();
+    if (gameObject->getObjectType() != GameObject::SCROLL) {
+        return "You can't read a " + name + ".";
+    }
+    Scroll* scroll = dynamic_cast<Scroll*>(gameObject);
+    string result = "You read a scroll called " + name + ".\n";
+    switch (scroll->getScrollType()) {
+        case Scroll::IMPROVE_ARMOR:
+            setArmorPoints(getArmorPoints() + scroll->getUpgradePoints());
+            return result + "Your armor glows blue.";
+            
+        case Scroll::RAISE_STRENGTH:
+            setStrengthPoints(getArmorPoints() + scroll->getUpgradePoints());
+            return result + "Your muscles bulge.";
+            
+        case Scroll::ENHANCE_HEALTH:
+            m_max_hit_points += scroll->getUpgradePoints();
+            return result + "You feel your heart beating stronger.";
+            
+        case Scroll::ENHANCE_DEXTERITY:
+            setDexterityPoints(getDexterityPoints() + scroll->getUpgradePoints());
+            return result + "You feel like less of a klutz.";
+            
+        case Scroll::TELEPORTATION:
+            // Let the dungeon take care of teleporting
+            return result + "You feel your body wrenched in space and time.";
+            
+        default:
+            break;
+    }
+    m_inventory.remove(pos);
+    return "";
+}
+
+void Player::regainHitPoints() {
+    int hitPoints = getHitPoints();
+    if (hitPoints == m_max_hit_points) {
+        return;
+    }
+    setHitPoints(hitPoints + 1);
+}
+
+void Player::openInventory() {
+    m_inventory.display();
 }

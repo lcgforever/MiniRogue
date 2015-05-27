@@ -16,17 +16,33 @@
 class Player : public Actor {
 public:
     // Constructor
-    Player();
+    Player(int row, int col);
+    // Copy constructor
+    Player(const Player& other);
+    // Assignment operator
+    Player& operator=(const Player& other);
     // Destructor
-    ~Player();
+    ~Player() {}
+    
+    bool canPickUpItem() const;
+    bool canGetItemByPos(char pos) const;
+    bool pickedUpGoldenIdol() const;
+    
+    // Mutators
+    void setMaxHitPoints(int points);
+    void setPickedUpGoldenIdol();
     
     // Actions
-    void pickUpItem(GameObject* item);
-    bool wieldWeapon(char pos);
-    bool readScroll(char pos);
+    void pickUpItem(char objectType, GameObject* item);
+    string wieldWeapon(char pos);
+    string readScroll(char pos);
+    virtual void regainHitPoints();
+    void openInventory();
     
 private:
-    Inventory* m_inventory;
+    Inventory m_inventory;
+    int m_max_hit_points;
+    bool getGoldenIdol;
 };
 
 #endif /* defined(__MiniRogue__Player__) */

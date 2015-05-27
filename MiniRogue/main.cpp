@@ -18,7 +18,7 @@ int main()
     // will call randInt in a different circumstance than you did before.
     // This repeatability could be useful for debugging.
     
-//    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned int>(time(0)));
     
     // Your program must use whatever value is passed to the Game constructor
     // as the distance a goblin can smell.  The spec stated this is 15.  Some
